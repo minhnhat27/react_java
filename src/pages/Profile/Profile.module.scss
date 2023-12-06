@@ -1,0 +1,32 @@
+#userProfileImg {
+  width: 80px;
+  border-radius: 100%;
+}
+.editProfile {
+  font-size: 13px;
+  color: #888;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sidebar > div {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  cursor: pointer;
+
+  > a:first-child {
+    color: cornflowerblue;
+    display: flex;
+    align-items: center;
+  }
+  div {
+    color: black;
+    margin-left: 10px;
+  }
+}
+.selected {
+  color: red !important;
+  :last-child {
+    color: red !important;
+  }
+}

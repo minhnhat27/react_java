@@ -1,0 +1,90 @@
+:root {
+  --track-color: #d9d9d9;
+  --thumb-color: #f50;
+  --low-color: #f8dcd3;
+  --high-color: #eda891;
+}
+
+.priceTitle {
+  margin-top: 20px;
+}
+
+.ml {
+  position: relative;
+}
+
+.ml > .sidebarLabelContainer {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.priceValueContainer {
+  width: 100%;
+  height: 1rem;
+}
+
+.priceValueWrapper {
+  width: 100%;
+}
+
+.priceValueWrapper .priceValue {
+  width: 7rem;
+}
+
+.priceValue {
+  border: 0;
+  outline: none;
+  text-align: right;
+  font-size: medium;
+  caret-color: transparent;
+  padding-right: 0.5rem;
+}
+
+.priceValue:focus {
+  outline: none;
+}
+
+.currency {
+  text-align: left;
+}
+
+.priceSliderContainer {
+  margin: 0%;
+}
+
+.priceSlider {
+  cursor: pointer;
+  outline: none;
+  border-radius: 16px;
+  height: 6px;
+  width: 110%;
+}
+
+.low {
+  accent-color: var(--low-color);
+}
+
+.high {
+  accent-color: var(--high-color);
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .priceSliderContainer {
+    margin: 15px 20% 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .priceSliderContainer {
+    margin: 15px 25% 0;
+  }
+}
+
+.show {
+  display: flex;
+  justify-content: center;
+}
+
+.hide {
+  display: none;
+}

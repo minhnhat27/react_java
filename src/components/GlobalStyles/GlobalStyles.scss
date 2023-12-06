@@ -1,0 +1,23 @@
+@import 'bootstrap/dist/css/bootstrap.css';
+:root {
+  --secondary-color: #6c757d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+body {
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+}
+
+a[href] {
+  text-decoration: none;
+}
+
+.text-danger {
+  font-size: 12px;
+}
