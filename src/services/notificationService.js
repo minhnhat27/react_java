@@ -12,6 +12,7 @@ const Success = (message) => {
     dismiss: {
       duration: 2000,
       onScreen: false,
+      pauseOnHover: true,
     },
   })
 }
@@ -28,6 +29,7 @@ const Danger = (message) => {
     dismiss: {
       duration: 2000,
       onScreen: false,
+      pauseOnHover: true,
     },
   })
 }
@@ -43,6 +45,7 @@ const Info = (message) => {
     dismiss: {
       duration: 2000,
       onScreen: false,
+      pauseOnHover: true,
     },
   })
 }
@@ -59,6 +62,7 @@ const Warning = (message) => {
     dismiss: {
       duration: 2000,
       onScreen: false,
+      pauseOnHover: true,
     },
   })
 }
@@ -74,6 +78,7 @@ const Default = (message) => {
     dismiss: {
       duration: 2000,
       onScreen: false,
+      pauseOnHover: true,
     },
   })
 }

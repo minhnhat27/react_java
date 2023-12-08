@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
-import style from '../ProductsCard/ProductsCard.module.scss'
 
-export const Image = ({ img, title }) => {
+export const Image = ({ img, title, width, height, className, folder, draggable }) => {
   const [imageSrc, setImageSrc] = useState(null)
 
   useEffect(() => {
     const loadImage = async () => {
       try {
-        const imageModule = await import(`../../assets/img/${img}`)
+        const imageModule = folder
+          ? await import(`../../assets/img/${folder}/${img}`)
+          : await import(`../../assets/img/${img}`)
         setImageSrc(imageModule.default)
       } catch (error) {
         console.error('Error loading image:', error)
@@ -15,5 +16,5 @@ export const Image = ({ img, title }) => {
     }
     loadImage()
   }, [img])
-  return <img src={imageSrc} alt={title} className={style.cardImg} />
+  return <img src={imageSrc} alt={title} className={className} width={width} height={height} draggable={draggable} />
 }

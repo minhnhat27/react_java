@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import style from './Paginate.module.scss'
 import { ProductsCard } from '../ProductsCard'
@@ -14,19 +14,23 @@ export default function Pagination({ data, itemsPerPage }) {
   const pageCount = Math.ceil(data.length / itemsPerPage)
   const currentPageData = data.slice(offset, offset + itemsPerPage)
 
+  useEffect(() => {
+    setCurrentPage(0)
+  }, [data])
+
   return (
     <div>
       {<ProductsCard result={currentPageData} />}
       <ReactPaginate
         breakLabel="..."
-        nextLabel="next >"
+        nextLabel="tiếp theo >"
         onPageChange={handlePageClick}
         pageRangeDisplayed={3}
         pageCount={pageCount}
         containerClassName={style.pagination}
         activeClassName={style.active}
         disabledClassName={style.disable}
-        previousLabel="< previous"
+        previousLabel="< trước"
         renderOnZeroPageCount={null}
       />
     </div>

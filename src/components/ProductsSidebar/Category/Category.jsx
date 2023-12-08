@@ -1,7 +1,7 @@
-import { addItem } from '../../../services/general'
+import { AddItem } from '../../../services/general'
 import style from '../Sidebar.module.scss'
 
-export const Category = ({ handleChange }) => {
+export const Category = ({ handleChange, products }) => {
   return (
     <div className={style.sidebarContainer}>
       <h2 className={style.sidebarTitle}>Loại sản phẩm</h2>
@@ -9,7 +9,7 @@ export const Category = ({ handleChange }) => {
         <input type="radio" value="" name="category" onChange={(e) => handleChange(e, 'category')} />
         <span className={style.checkmark}></span>Tất cả
       </label>
-      {addItem('category', handleChange)}
+      {AddItem('category', handleChange, products)}
     </div>
   )
 }

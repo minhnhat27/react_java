@@ -1,12 +1,13 @@
-import products from '../db/data'
+// import products from '../db/data'
 import { Input } from '../components/UI/Input'
+import { useEffect } from 'react'
 
-export const toPascalCase = (str) => {
+const toPascalCase = (str) => {
   str = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
   return str
 }
 
-export function addItem(key, handleChange) {
+export function AddItem(key, handleChange, products) {
   const setItem = []
   for (let product of products) {
     if (!setItem.some((cat) => cat.key === product[key])) {
@@ -23,3 +24,5 @@ export function addItem(key, handleChange) {
   }
   return setItem
 }
+
+export const formatter = new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' })

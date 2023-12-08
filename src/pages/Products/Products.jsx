@@ -1,18 +1,36 @@
 import style from './Products.module.scss'
-import products from '../../db/data'
+// import products from '../../db/data'
 import Sort from '../../components/ProductsCard/Sort/Sort'
 import { Recommended } from '../../components/ProductsCard/Recommended/Recommended'
 import { Sidebar } from '../../components/ProductsSidebar/Sidebar'
 import { Card } from '../../components/UI/Card'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import PublicService from '../../services/public-service'
+import { AiFillStar } from 'react-icons/ai'
 
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedBrand, setSelectedBrand] = useState('')
-  const [selectedPrice, setSelectedPrice] = useState(10000000)
-
+  const [selectedPrice, setSelectedPrice] = useState(200000000)
   const [query, setQuery] = useState('')
+
+  const [products, setProducts] = useState([])
+
+  useEffect(() => {
+    PublicService.getProducts()
+      .then((response) => {
+        const data = response.data
+        const newData = data.map((data) => {
+          const prevPrice = data.price
+          const newPrice = data.price - (data.price * data.discountPercent) / 100
+          return { ...data, prevPrice: prevPrice, newPrice: newPrice, star: <AiFillStar className="rating-star" /> }
+        })
+
+        setProducts(newData)
+      })
+      .catch((error) => error)
+  }, [])
 
   const handleInputChange = (event) => {
     setQuery(event.target.value)
@@ -63,9 +81,9 @@ export default function Products() {
         }
       })
     }
-    return filteredProducts.map(({ id, main_image, name, star, prevPrice, newPrice }) => (
+    return filteredProducts.map(({ id, mainImage, name, star, prevPrice, newPrice }) => (
       <div key={id}>
-        <Card img={main_image} title={name} star={star} prevPrice={prevPrice} newPrice={newPrice} />
+        <Card id={id} img={mainImage} title={name} star={star} prevPrice={prevPrice} newPrice={newPrice} />
       </div>
     ))
   }
@@ -73,7 +91,7 @@ export default function Products() {
   const result = filteredData(products, selectedCategory, selectedBrand, selectedPrice, query)
   return (
     <div className={`${style.bgProduct}`}>
-      <Sidebar handleChange={handleChange} />
+      <Sidebar handleChange={handleChange} products={products} />
       {/* <Navigation query={query} handleInputChange={handleInputChange} /> */}
       <Recommended handleClick={handleClick} />
       <Sort result={result} />

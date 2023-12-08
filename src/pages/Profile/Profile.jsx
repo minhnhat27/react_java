@@ -5,7 +5,7 @@ import { FaUser, FaListAlt, FaMap } from 'react-icons/fa'
 import style from './Profile.module.scss'
 import { Link } from 'react-router-dom'
 import AuthService from '../../services/auth-service'
-import ProfileService from '../../services/profile-service'
+import UserService from '../../services/user-service'
 import notificationService from '../../services/notificationService'
 import ProfileDetails from '../../components/ProfileDetails/ProfileDetails'
 import ProfileOrderLists from '../../components/ProfileDetails/ProfileOrders'
@@ -42,7 +42,7 @@ export default function Profile() {
     }
   }
   useEffect(() => {
-    ProfileService.getProfile()
+    UserService.getProfile()
       .then((response) => {
         const updatedData = {}
         for (let key in response.data) {

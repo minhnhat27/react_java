@@ -32,6 +32,9 @@ export default function Header() {
           Đăng nhập
         </Link>
       )}
+      <Link className="mx-2" to="/cart">
+        Giỏ hàng
+      </Link>
     </div>
   )
 }

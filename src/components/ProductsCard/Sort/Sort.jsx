@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import style from './Sort.module.scss'
-import { ProductsCard } from '../ProductsCard'
 import Pagination from '../Paginate/Paginate'
 
 export default function Sort({ result }) {
@@ -34,7 +33,7 @@ export default function Sort({ result }) {
           <option value="3">Giá cao đến thấp</option>
         </select>
       </div>
-      <Pagination data={resultSort} itemsPerPage={3} />
+      <Pagination data={resultSort} itemsPerPage={9} />
     </>
   )
 }

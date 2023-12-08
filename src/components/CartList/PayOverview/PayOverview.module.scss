@@ -1,0 +1,8 @@
+.selected:first-child {
+  box-shadow: 0 0 8px;
+}
+
+.method {
+  user-select: none;
+  cursor: pointer;
+}

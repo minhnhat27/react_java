@@ -1,8 +1,7 @@
+import { formatter } from '../../services/general'
 import stypePrice from '../ProductsSidebar/Price/Price.module.scss'
-// import { NumericFormat } from 'react-number-format'
-export const Value = ({ value }) => {
-  const formatter = new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' })
 
+export const Value = ({ value }) => {
   const isDisplay = value > 0 ? stypePrice.show : stypePrice.hide
   let price = (
     <>

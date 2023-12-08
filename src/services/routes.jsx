@@ -8,6 +8,7 @@ import { Route } from 'react-router-dom'
 import Products from '../pages/Products/Products'
 import VerifyCode from '../components/VerifyCode/VerifyCode'
 import Profile from '../pages/Profile/Profile'
+import Cart from '../pages/Cart/Cart'
 
 export const publicRoutes = [
   { path: '/', component: Home },
@@ -16,6 +17,7 @@ export const publicRoutes = [
   { path: '/register', component: Register, layout: null },
   { path: '/verify', component: VerifyCode, layout: null },
   { path: '/products', component: Products },
+  { path: '/cart', component: Cart },
 ]
 
 export const privateRoutes = [

@@ -33,13 +33,14 @@ export default function Login() {
 
     AuthService.login(email, password).then(
       () => {
-        dispath(actions.actionLogin(AuthService.getCurrentUser))
+        dispath(actions.actionLogin())
         setLoading(false)
         notificationService.Success('Đăng nhập thành công')
         navigate('/home')
       },
       (error) => {
         setLoading(false)
+        dispath(actions.actionLogout())
         notificationService.Danger('Đăng nhập thất bại')
         setError('password', { message: error.response.data })
         setValue('password', '')

@@ -1,6 +1,6 @@
 import style from './ProfileDetails.module.scss'
 import logo from '../../logo.svg'
-import ProfileService from '../../services/profile-service'
+import UserService from '../../services/user-service'
 
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useState } from 'react'
@@ -60,7 +60,7 @@ export default function ProfileDetails({ user, setUser }) {
     // formData.append('sex', user.sex)
     //formData.append('file', user.picture)
 
-    ProfileService.updateProfile({
+    UserService.updateProfile({
       ...getValues(),
       sex: parseInt(watch('sex')),
     })
@@ -80,9 +80,11 @@ export default function ProfileDetails({ user, setUser }) {
   }
 
   const validateDate = (selectedDate) => {
-    const today = new Date()
-    const selected = new Date(selectedDate)
-    return selected <= today || 'Ngày sinh không thể lớn hơn ngày hiện tại'
+    if (selectedDate != 'Invalid Date') {
+      const today = new Date()
+      const selected = new Date(selectedDate)
+      return selected <= today || 'Ngày sinh không thể lớn hơn ngày hiện tại'
+    }
   }
 
   return (
