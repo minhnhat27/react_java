@@ -5,8 +5,7 @@ import { useEffect, useState } from 'react'
 import UserService from '../../services/user-service'
 import notificationService from '../../services/notificationService'
 
-export default function CartList({ cartItems, setCartItems, Total, Discount, Checkout }) {
-  const [products, setProducts] = useState([])
+export default function CartList({ cartItems, setCartItems, products, setProducts, Total, Discount }) {
   const [checkAll, setCheckAll] = useState(false)
   // const [quantity, setQuantity] = useState()
 
@@ -23,7 +22,7 @@ export default function CartList({ cartItems, setCartItems, Total, Discount, Che
   useEffect(() => {
     var dis = 0
     var tol = 0
-    products.map((value) => {
+    products.forEach((value) => {
       tol += value.price * value.quantity
       dis += ((value.price * value.discountPercent) / 100) * value.quantity
     })

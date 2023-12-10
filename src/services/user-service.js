@@ -3,6 +3,7 @@ import authHeader from './auth-header'
 
 const Profile_URL = 'http://localhost:8070/api/profile/'
 const Cart_URL = 'http://localhost:8070/api/cart/'
+const Order_URL = 'http://localhost:8070/api/order/'
 
 const getProfile = () => {
   return axios.get(Profile_URL + `getProfile`, { headers: authHeader() })
@@ -28,6 +29,14 @@ const deleteAllCart = async () => {
   await axios.get(Cart_URL + 'deleteAllCart', { headers: authHeader() })
 }
 
+const orderProducts = async (data) => {
+  await axios.post(Order_URL + 'orderProducts', data, { headers: authHeader() })
+}
+
+const getAllOrder = () => axios.get(Order_URL + 'getOrders', { headers: authHeader() })
+
+const updateOrder = (data) => axios.post(Order_URL + 'updateOrder', data, { headers: authHeader() })
+
 const UserService = {
   getProfile,
   updateProfile,
@@ -35,5 +44,8 @@ const UserService = {
   addToCart,
   deleteCart,
   deleteAllCart,
+  orderProducts,
+  getAllOrder,
+  updateOrder,
 }
 export default UserService

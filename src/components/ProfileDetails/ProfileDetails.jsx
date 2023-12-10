@@ -1,41 +1,58 @@
 import style from './ProfileDetails.module.scss'
-import logo from '../../logo.svg'
 import UserService from '../../services/user-service'
 
-import { useEffect, useLayoutEffect, useRef } from 'react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import notificationService from '../../services/notificationService'
+import logo from '../../logo.svg'
 
-export default function ProfileDetails({ user, setUser }) {
+export default function ProfileDetails() {
+  const [user, setUser] = useState({
+    picture: logo,
+    username: '',
+    lastname: '',
+    firstname: '',
+    email: '',
+    birthday: '',
+    sex: '-1',
+  })
   const fileInputRef = useRef(null)
-  // const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
     getValues,
+    reset,
   } = useForm({
-    defaultValues: {
-      ...user,
-    },
+    defaultValues: user,
   })
 
-  // const handleInputChange = (e) => {
-  //   if (e.target.name === 'sex') {
-  //     setUser({
-  //       ...user,
-  //       [e.target.name]: parseInt(e.target.value),
-  //     })
-  //   } else {
-  //     setUser({
-  //       ...user,
-  //       [e.target.name]: e.target.value,
-  //     })
-  //   }
-  // }
+  useEffect(() => {
+    UserService.getProfile()
+      .then((response) => {
+        const updatedData = {}
+        for (let key in response.data) {
+          if (response.data[key] === null) {
+            updatedData[key] = ''
+          } else {
+            updatedData[key] = response.data[key].toString()
+            if (key === 'birthday') {
+              updatedData[key] = response.data[key].substring(0, 10)
+            }
+          }
 
+          if (key === 'picture') {
+            updatedData[key] = logo
+          }
+        }
+        setUser(updatedData)
+        reset(updatedData)
+      })
+      .catch(() => {
+        notificationService.Warning('Có lỗi xảy ra. Không thể lấy thông tin người dùng')
+      })
+  }, [reset])
   const handleClickUpload = () => {
     fileInputRef.current.click()
   }
@@ -50,26 +67,13 @@ export default function ProfileDetails({ user, setUser }) {
   }
 
   const handleSubmitProfile = () => {
-    //const formData = new FormData()
-    // formData.append('username', user.username)
-    // formData.append('lastname', user.lastname)
-    // formData.append('firstname', user.firstname)
-    // formData.append('email', user.email)
-    // formData.append('phone', user.phone)
-    // formData.append('birthday', user.birthday)
-    // formData.append('sex', user.sex)
-    //formData.append('file', user.picture)
-
     UserService.updateProfile({
       ...getValues(),
       sex: parseInt(watch('sex')),
     })
       .then(
         () => {
-          setUser({
-            ...getValues(),
-            sex: parseInt(watch('sex')),
-          })
+          setUser(getValues())
           notificationService.Success('Cập nhật thông tin thành công')
         },
         () => {
@@ -80,7 +84,7 @@ export default function ProfileDetails({ user, setUser }) {
   }
 
   const validateDate = (selectedDate) => {
-    if (selectedDate != 'Invalid Date') {
+    if (selectedDate.toString() !== 'Invalid Date') {
       const today = new Date()
       const selected = new Date(selectedDate)
       return selected <= today || 'Ngày sinh không thể lớn hơn ngày hiện tại'
@@ -111,7 +115,7 @@ export default function ProfileDetails({ user, setUser }) {
                         id="email"
                         name="email"
                         {...register('email')}
-                        defaultValue="1"
+                        defaultValue=""
                       />
                     </td>
                   </tr>
@@ -181,7 +185,6 @@ export default function ProfileDetails({ user, setUser }) {
                           name="sex"
                           className="form-check-input"
                           {...register('sex')}
-                          defaultChecked={watch('sex') === 0}
                         />
                         <label htmlFor="male">Nam</label>
                         <input
@@ -191,7 +194,6 @@ export default function ProfileDetails({ user, setUser }) {
                           name="sex"
                           className="form-check-input"
                           {...register('sex')}
-                          defaultChecked={watch('sex') === 1}
                         />
                         <label htmlFor="female">Nữ</label>
                         <input
@@ -201,7 +203,6 @@ export default function ProfileDetails({ user, setUser }) {
                           name="sex"
                           className="form-check-input"
                           {...register('sex')}
-                          defaultChecked={watch('sex') !== 0 && watch('sex') !== 1}
                         />
                         <label htmlFor="other">Khác</label>
                       </div>

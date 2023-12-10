@@ -1,10 +1,10 @@
-export const actionLogin = () => ({
+export const actionLogin = {
   type: 'LOGIN',
-})
+}
 
-export const actionLogout = () => ({
+export const actionLogout = {
   type: 'LOGOUT',
-})
+}
 
 const actions = {
   actionLogin,

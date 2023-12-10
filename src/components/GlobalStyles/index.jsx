@@ -1,5 +1,5 @@
 import './GlobalStyles.scss'
 
-export default function ({ children }) {
+export default function GlobalStyles({ children }) {
   return children
 }

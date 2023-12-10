@@ -1,6 +1,5 @@
 // import products from '../db/data'
 import { Input } from '../components/UI/Input'
-import { useEffect } from 'react'
 
 const toPascalCase = (str) => {
   str = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()

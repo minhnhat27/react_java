@@ -1,73 +1,13 @@
 import logo from '../../logo.svg'
-import React, { useEffect, useState } from 'react'
-import { FaUser, FaListAlt, FaMap } from 'react-icons/fa'
+import { FaUser, FaListAlt } from 'react-icons/fa'
 
 import style from './Profile.module.scss'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import AuthService from '../../services/auth-service'
-import UserService from '../../services/user-service'
-import notificationService from '../../services/notificationService'
-import ProfileDetails from '../../components/ProfileDetails/ProfileDetails'
-import ProfileOrderLists from '../../components/ProfileDetails/ProfileOrders'
-import ProfileAddress from '../../components/ProfileDetails/ProfileAddress'
 
-export default function Profile() {
+export default function Profile({ children }) {
+  const { pathname } = useLocation()
   const currentUser = AuthService.getCurrentUser()
-  const [user, setUser] = useState({
-    picture: logo,
-    username: '',
-    lastname: '',
-    firstname: '',
-    email: '',
-    birthday: '',
-    sex: -1,
-  })
-
-  const [nav, setNav] = useState(1)
-  const [child, setChild] = useState()
-  const handleClickNav = (value) => {
-    setNav(value)
-    switch (value) {
-      case 1:
-        setChild(<ProfileDetails user={user} setUser={setUser} />)
-        break
-      case 2:
-        setChild(<ProfileOrderLists />)
-        break
-      case 3:
-        setChild(<ProfileAddress />)
-        break
-      default:
-        setChild(<ProfileDetails user={user} />)
-    }
-  }
-  useEffect(() => {
-    UserService.getProfile()
-      .then((response) => {
-        const updatedData = {}
-        for (let key in response.data) {
-          if (response.data[key] === null) {
-            updatedData[key] = ''
-          } else {
-            updatedData[key] = response.data[key]
-            if (key === 'birthday') {
-              updatedData[key] = response.data[key].substring(0, 10)
-            }
-          }
-        }
-        setUser(updatedData)
-        setChild(<ProfileDetails user={updatedData} setUser={setUser} />)
-      })
-      .catch(() => {
-        // navigate('/home');
-        setChild(<ProfileDetails user={user} setUser={setUser} />)
-        notificationService.Warning('Có lỗi xảy ra. Không thể lấy thông tin người dùng')
-      })
-  }, [])
-
-  const limitText = (text, limit) => {
-    return text.length > limit ? text.substring(0, limit) + '...' : text
-  }
 
   return (
     <div className="container-fluid p-3">
@@ -76,7 +16,7 @@ export default function Profile() {
           <div className="d-flex flex-row justify-content-center align-items-center">
             <img id={style.userProfileImg} src={logo} alt="" />
             <div>
-              <div className="fw-medium">{limitText(user.email, 14)}</div>
+              <div className={style.userName}>{currentUser.email}</div>
               <Link to="/profile/details" className={style.editProfile}>
                 Sửa Hồ Sơ
               </Link>
@@ -84,27 +24,27 @@ export default function Profile() {
           </div>
           <hr />
           <div className={`${style.sidebar} d-flex flex-row justify-content-between flex-md-column`}>
-            <div className={nav === 1 ? style.selected : ''} onClick={() => handleClickNav(1)}>
+            <div className={pathname === '/profile/details' || pathname === '/profile' ? style.selected : ''}>
               <Link to="/profile/details">
                 <FaUser />
                 <div>Thông tin tài khoản</div>
               </Link>
             </div>
-            <div className={nav === 2 ? style.selected : ''} onClick={() => handleClickNav(2)}>
+            <div className={pathname === '/profile/orders' ? style.selected : ''}>
               <Link to="/profile/orders">
                 <FaListAlt />
                 <div>Quản lý đơn hàng</div>
               </Link>
             </div>
-            <div className={nav === 3 ? style.selected : ''} onClick={() => handleClickNav(3)}>
+            {/* <div className={pathname === '/profile/address' ? style.selected : ''}>
               <Link to="/profile/address">
                 <FaMap />
                 <div>Địa chỉ</div>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
-        <div className="col-md-10 col-12">{child}</div>
+        <div className="col-md-10 col-12">{children}</div>
       </div>
     </div>
   )

@@ -1,0 +1,15 @@
+.nav-item {
+  .nav-link {
+    color: rgb(88, 88, 86);
+    font-size: 20px;
+    margin-right: 30px;
+  }
+  &:hover {
+    .nav-link {
+      color: rgb(76, 0, 255);
+    }
+  }
+}
+.navbar {
+  background-color: black;
+}

@@ -1,47 +1,170 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import style from './ProfileDetails.module.scss'
+import { useEffect, useState } from 'react'
+import UserService from '../../services/user-service'
+import { formatter } from '../../services/general'
+import Loading from '../Loading/Loading'
+import notificationService from '../../services/notificationService'
+import Success from '../../components/Success/Success'
 
 export default function ProfileOrderLists() {
-  return (
-    <>
-      <div className={`${style.wrapper} container-fluild`}>
-        <div className={style.accountDetail}>
-          <div>Quản lý đơn hàng</div>
-          <p>Đơn hàng của tôi</p>
+  const { state } = useLocation()
+  const [success, setSuccess] = useState(state === null ? false : state.successOrder)
+
+  const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    UserService.getAllOrder()
+      .then((response) => {
+        setOrders(response.data)
+        setLoading(false)
+      })
+      .catch(() => {
+        setOrders([])
+        setLoading(false)
+      })
+  }, [])
+
+  const handleCancelOrder = (id) => {
+    UserService.updateOrder({
+      id: id,
+      action: 'cancel',
+    })
+      .then(() => {
+        const newOrders = []
+        orders.forEach((item) => {
+          if (item.id === id) {
+            item = {
+              ...item,
+              status: 'CANCELLED',
+            }
+          }
+          newOrders.push(item)
+        })
+        setOrders([...newOrders])
+        notificationService.Success('Hủy đơn hàng thành công')
+      })
+      .catch(() => notificationService.Danger('Không thể hủy đơn hàng'))
+  }
+
+  const generalStatus = (status) => {
+    switch (status) {
+      case 'CANCELLED':
+        return <td className="text-warning">Đơn hàng đã bị hủy</td>
+      case 'PROCESSING':
+        return <td className="text-secondary">Đơn hàng đang được xử lý</td>
+      case 'SHIPPING':
+        return <td className="text-primary">Đơn hàng đang được vận chuyển</td>
+      case 'DELIVERED':
+        return <td className="text-success">Đơn hàng đã giao thành công</td>
+      default:
+        return <td className="text-secondary">Đơn hàng đang được xử lý</td>
+    }
+  }
+
+  const handleReceiveOrder = (id) => {
+    UserService.updateOrder({
+      id: id,
+      action: 'receive',
+    })
+      .then(() => {
+        const newOrders = []
+        orders.forEach((item) => {
+          if (item.id === id) {
+            item = {
+              ...item,
+              status: 'DELIVERED',
+            }
+          }
+          newOrders.push(item)
+        })
+        setOrders([...newOrders])
+        notificationService.Success('Cập nhật trạng thái thành công')
+      })
+      .catch(() => notificationService.Danger('Không cập nhật trạng thái'))
+  }
+
+  const hideSuccess = () => {
+    setTimeout(() => {
+      setSuccess(false)
+    }, 1500)
+  }
+
+  useEffect(() => {
+    hideSuccess()
+  }, [])
+
+  if (loading) {
+    return <Loading />
+  } else if (orders.length === 0) {
+    return (
+      <>
+        <div className={`${style.wrapper} container-fluild`}>
+          <div className={style.accountDetail}>
+            <div>Quản lý đơn hàng</div>
+            <p>Đơn hàng của tôi</p>
+          </div>
+          <div className="text-center my-5">
+            <h3>Bạn chưa có đơn hàng nào</h3>
+            <Link type="button" className="btn btn-primary m-3 text-white" to="/products">
+              Mua sắm ngay
+            </Link>
+          </div>
         </div>
-        <div className="table-responsive mt-3">
-          <table className={`${style.listOrder} table`}>
-            <thead>
-              <tr>
-                <td>Mã đơn hàng</td>
-                <td>Ngày mua</td>
-                <td>Sản phẩm</td>
-                <td>Tổng tiền (đ)</td>
-                <td>Trạng thái</td>
-              </tr>
-              <tr>
-                <td>
-                  <Link to="/orders/:id">12321312</Link>
-                </td>
-                <td>01/08/2022</td>
-                <td>Laptop ...</td>
-                <td>20.000.000</td>
-                <td>Đã giao hàng</td>
-              </tr>
-              <tr>
-                <td>
-                  <Link to="/orders/:id">12324123</Link>
-                </td>
-                <td>12/12/2022</td>
-                <td>RAM 8GB ...</td>
-                <td>800.000</td>
-                <td>Đã hủy</td>
-              </tr>
-            </thead>
-          </table>
+      </>
+    )
+  } else {
+    return (
+      <>
+        {success && <Success />}
+        <div className={`${style.wrapper} container-fluild`}>
+          <div className={style.accountDetail}>
+            <div>Quản lý đơn hàng</div>
+            <p>Đơn hàng của tôi</p>
+          </div>
+          <div className="table-responsive mt-3">
+            <table className={`${style.listOrder} table`}>
+              <thead>
+                <tr>
+                  <td>Mã đơn hàng</td>
+                  <td>Ngày đặt hàng</td>
+                  <td>Tổng tiền (đ)</td>
+                  <td colSpan={2}>Trạng thái</td>
+                </tr>
+                {orders.map((item, i) => {
+                  return (
+                    <tr key={i}>
+                      <td>
+                        <Link to={`${item.id}`}>{item.id}</Link>
+                      </td>
+                      <td>{item.orderTime}</td>
+                      <td>{formatter.format(item.total)}</td>
+                      {generalStatus(item.status)}
+                      <td>
+                        {item.status === 'PROCESSING' ? (
+                          <button className="btn btn-primary" onClick={() => handleCancelOrder(item.id)}>
+                            Hủy đơn
+                          </button>
+                        ) : (
+                          ''
+                        )}
+                        {item.status === 'SHIPPING' ? (
+                          <button className="btn btn-primary" onClick={() => handleReceiveOrder(item.id)}>
+                            Đã nhận hàng
+                          </button>
+                        ) : (
+                          ''
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </thead>
+            </table>
+          </div>
         </div>
-      </div>
-    </>
-  )
+      </>
+    )
+  }
 }

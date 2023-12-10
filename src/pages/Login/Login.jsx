@@ -11,9 +11,9 @@ import notificationService from '../../services/notificationService'
 
 export default function Login() {
   const navigate = useNavigate()
-  const { dispath } = useAuth()
+  const { dispatch } = useAuth()
 
-  const [check, setCheck] = useState(false)
+  // const [check, setCheck] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const {
@@ -33,14 +33,14 @@ export default function Login() {
 
     AuthService.login(email, password).then(
       () => {
-        dispath(actions.actionLogin())
+        dispatch(actions.actionLogin)
         setLoading(false)
         notificationService.Success('Đăng nhập thành công')
         navigate('/home')
       },
       (error) => {
         setLoading(false)
-        dispath(actions.actionLogout())
+        dispatch(actions.actionLogout)
         notificationService.Danger('Đăng nhập thất bại')
         setError('password', { message: error.response.data })
         setValue('password', '')
@@ -48,9 +48,9 @@ export default function Login() {
     )
   }
 
-  const handleChangeCheck = (e) => {
-    setCheck(!check)
-  }
+  // const handleChangeCheck = (e) => {
+  //   setCheck(!check)
+  // }
 
   return (
     <>
@@ -88,7 +88,7 @@ export default function Login() {
                           })}
                         />
                         {loading && (
-                          <div id="spinner" className="position-absolute" style={{ top: '34%', right: 12 }}>
+                          <div id="spinner" className="position-absolute" style={{ top: '38%', right: 12 }}>
                             <div className="spinner-border spinner-border-sm text-primary" role="status">
                               <span className="visually-hidden">Loading...</span>
                             </div>
@@ -107,7 +107,7 @@ export default function Login() {
                         />
                         <span className="text-danger">{errors.password && errors.password.message}</span>
                       </div>
-                      <div className="d-flex align-items-center justify-content-between mb-4">
+                      {/* <div className="d-flex align-items-center justify-content-between mb-4">
                         <div className="form-check">
                           <input
                             className="form-check-input primary"
@@ -121,7 +121,7 @@ export default function Login() {
                           </label>
                         </div>
                         <Link className="text-primary">Quên mật khẩu?</Link>
-                      </div>
+                      </div> */}
                       <button type="submit" className="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
                         Đăng nhập
                       </button>

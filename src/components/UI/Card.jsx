@@ -5,20 +5,20 @@ import style from '../ProductsCard/ProductsCard.module.scss'
 import UserService from '../../services/user-service'
 import notificationService from '../../services/notificationService'
 import { useAuth } from '../../App'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const Card = ({ id, img, title, star, prevPrice, newPrice }) => {
   const { state } = useAuth()
   const navigate = useNavigate()
 
-  const handAddToCart = (id) => {
+  const handleAddToCart = (id) => {
     if (state.isAuthenticated) {
       const data = {
         productId: id,
         quantity: 1,
       }
       UserService.addToCart(data).then(
-        (response) => {
+        () => {
           notificationService.Success('Thêm vào giỏ hàng thành công')
         },
         () => {
@@ -33,7 +33,9 @@ export const Card = ({ id, img, title, star, prevPrice, newPrice }) => {
 
   return (
     <section className={style.card}>
-      <Image img={img} folder="products" title={title} className={style.cardImg} />
+      <Link to={`/product/${id}`}>
+        <Image img={img} folder="products" title={title} className={style.cardImg} />
+      </Link>
       <div className={style.cardDetails}>
         <h5 className={style.cardTitle}>{title}</h5>
         <section className={style.cardReviews}>
@@ -52,7 +54,7 @@ export const Card = ({ id, img, title, star, prevPrice, newPrice }) => {
             </span>
             <Value value={newPrice} />
           </div>
-          <div className={style.bag} onClick={() => handAddToCart(id)} title="Thêm vào giỏ hàng">
+          <div className={style.bag} onClick={() => handleAddToCart(id)} title="Thêm vào giỏ hàng">
             <BsFillCartPlusFill />
           </div>
         </section>

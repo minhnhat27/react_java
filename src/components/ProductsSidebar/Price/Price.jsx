@@ -22,9 +22,9 @@ export const Price = ({ handleChange }) => {
             <input
               className={`${style.priceSlider} ${isExpensive}`}
               type="range"
-              min="5000000"
-              max="200000000"
-              step="5000000"
+              min="500000"
+              max="20000000"
+              step="500000"
               value={value}
               name="price"
               onChange={(e) => changeCurrency(e)}

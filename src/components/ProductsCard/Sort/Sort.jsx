@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import style from './Sort.module.scss'
 import Pagination from '../Paginate/Paginate'
 

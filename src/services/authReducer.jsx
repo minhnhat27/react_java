@@ -1,5 +1,6 @@
-const user = JSON.parse(localStorage.getItem('user'))
+import AuthService from './auth-service'
 
+const user = AuthService.getCurrentUser()
 export const initialState =
   user !== null
     ? {

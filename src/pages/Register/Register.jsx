@@ -15,7 +15,6 @@ export default function Register() {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue,
     getValues,
     setError,
   } = useForm()
@@ -31,16 +30,15 @@ export default function Register() {
       url: window.location.origin,
     }
     AuthService.register(formData).then(
-      (response) => {
+      () => {
         setLoading(false)
-        notificationService.Success(response.data.message)
+        notificationService.Success('Đăng ký thành công, vui lòng kiểm tra Email của bạn')
         navigate('/login')
       },
       (error) => {
         setLoading(false)
+        notificationService.Danger(error.response.data)
         setError('confirmPassword', { message: error.response.data })
-        setValue('password', '')
-        setValue('confirmPassword', '')
       },
     )
   }

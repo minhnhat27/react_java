@@ -4,10 +4,12 @@ import Sort from '../../components/ProductsCard/Sort/Sort'
 import { Recommended } from '../../components/ProductsCard/Recommended/Recommended'
 import { Sidebar } from '../../components/ProductsSidebar/Sidebar'
 import { Card } from '../../components/UI/Card'
+import { Search } from '../../components/ProductsCard/Search/Search'
 
 import { useEffect, useState } from 'react'
 import PublicService from '../../services/public-service'
 import { AiFillStar } from 'react-icons/ai'
+import Loading from '../../components/Loading/Loading'
 
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -16,6 +18,7 @@ export default function Products() {
   const [query, setQuery] = useState('')
 
   const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     PublicService.getProducts()
@@ -28,8 +31,9 @@ export default function Products() {
         })
 
         setProducts(newData)
+        setLoading(false)
       })
-      .catch((error) => error)
+      .catch(() => setLoading(false))
   }, [])
 
   const handleInputChange = (event) => {
@@ -89,12 +93,16 @@ export default function Products() {
   }
 
   const result = filteredData(products, selectedCategory, selectedBrand, selectedPrice, query)
-  return (
-    <div className={`${style.bgProduct}`}>
-      <Sidebar handleChange={handleChange} products={products} />
-      {/* <Navigation query={query} handleInputChange={handleInputChange} /> */}
-      <Recommended handleClick={handleClick} />
-      <Sort result={result} />
-    </div>
-  )
+  if (loading) {
+    return <Loading />
+  } else {
+    return (
+      <div className={style.bgProduct}>
+        <Sidebar handleChange={handleChange} products={products} />
+        <Search query={query} handleInputChange={handleInputChange} />
+        <Recommended handleClick={handleClick} handleInputChange={handleInputChange} />
+        <Sort result={result} />
+      </div>
+    )
+  }
 }

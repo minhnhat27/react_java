@@ -21,7 +21,7 @@ const register = async (data) => {
   return await axios.post(API_URL + 'signup', data)
 }
 
-const logout = async () => localStorage.removeItem('user')
+const logout = () => localStorage.removeItem('user')
 const getCurrentUser = () => JSON.parse(localStorage.getItem('user'))
 
 const verifyCode = async (code) => {
@@ -30,6 +30,7 @@ const verifyCode = async (code) => {
     if (response.status === 200) {
       return true
     }
+    return false
   } catch (error) {
     return false
   }
